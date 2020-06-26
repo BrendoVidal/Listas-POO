@@ -24,6 +24,7 @@ import java.util.logging.Logger;
  * @author chris
  */
 public class ServidorService {
+
     private ServerSocket serverSocket;
     private Socket socket;
     private Map<String, ObjectOutputStream> mapOnlines = new HashMap<String, ObjectOutputStream>();
@@ -53,7 +54,7 @@ public class ServidorService {
         public ListenerSocket(Socket socket) {
             try {
                 this.output = new ObjectOutputStream(socket.getOutputStream());
-                this.input = new ObjectInputStream (socket.getInputStream());
+                this.input = new ObjectInputStream(socket.getInputStream());
             } catch (IOException ex) {
                 Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -66,20 +67,24 @@ public class ServidorService {
                 while ((message = (Chat) input.readObject()) != null) {
                     Action action = message.getAction();
 
-                    if (action.equals(Action.CONNECT)) {
-                        boolean isConnect = connect(message, output);
-                        if (isConnect) {
-                            mapOnlines.put(message.getName(), output);
+                    switch (action) {
+                        case CONNECT:
+                            boolean isConnect = connect(message, output);
+                            if (isConnect) {
+                                mapOnlines.put(message.getName(), output);
+                                sendOnlines();
+                            }
+                            break;
+                        case DISCONNECT:
+                            disconnect(message, output);
                             sendOnlines();
-                        }
-                    } else if (action.equals(Action.DISCONNECT)) {
-                        disconnect(message, output);
-                        sendOnlines();
-                        return;
-                    } else if (action.equals(Action.SEND_ONE)) {
-                        sendOne(message);
-                    } else if (action.equals(Action.SEND_ALL)) {
-                        sendAll(message);
+                            return;
+                        case SEND_ONE:
+                            sendOne(message);
+                            break;
+                        case SEND_ALL:
+                            sendAll(message);
+                            break;
                     }
                 }
             } catch (IOException ex) {
@@ -115,7 +120,7 @@ public class ServidorService {
     private void disconnect(Chat message, ObjectOutputStream output) {
         mapOnlines.remove(message.getName());
 
-        message.setText(" desconectou-se.");
+        message.setText(encriptar(" desconectou-se."));
 
         message.setAction(Action.SEND_ONE);
 
@@ -130,6 +135,34 @@ public class ServidorService {
         } catch (IOException ex) {
             Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private String encriptar(String text) {
+        String base = "abcçdefghijklmnopqrstuvwxyz0123456789ABCÇDEFGHIJKLMNOPQRSTUVWXYZ;:/?~^]}{`´+=_-)(*&¨%$#@!<>.,áéíóúÁÉÍÓÚàèìòùÀÈÌÒÙ";
+        int tamanhotxt = text.length();
+        int posicao;
+        String resultado = "";
+        for (int i = 0; i < tamanhotxt; i++) {
+            if (text.charAt(i) != ' ') {
+                System.err.println("---------------------------------------------------");
+                System.err.println("Letra escolhida cifra: " + text.charAt(i));
+                posicao = base.indexOf(text.charAt(i));
+                System.err.println("P i = 0; i < tamanhotxt; i++) {\n"
+                        + "            if (text.charAt(i) != ' ') {osição letra escolhida antes cifra: " + posicao);
+                posicao += 12;
+                System.err.println("Posição cifra ant if: " + posicao);
+                if (posicao > base.length() - 1) {
+                    posicao -= base.length();
+                }
+                System.err.println("Posiçãpo cifra pos if: " + posicao);
+                resultado += base.charAt(posicao);
+                System.err.println("Letra escolhida desifra : " + resultado);
+            } else {
+                resultado += ' ';
+            }
+        }
+        System.err.println("cifra: " + resultado);
+        return resultado;
     }
 
     private void sendOne(Chat message) {

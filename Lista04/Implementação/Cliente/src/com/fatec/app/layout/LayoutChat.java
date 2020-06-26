@@ -162,7 +162,8 @@ public class LayoutChat extends javax.swing.JFrame {
                 System.err.println("---------------------------------------------------");
                 System.err.println("Letra escolhida cifra: " + text.charAt(i));
                 posicao = base.indexOf(text.charAt(i));
-                System.err.println("Posição letra escolhida antes cifra: " + posicao);
+                System.err.println("P i = 0; i < tamanhotxt; i++) {\n" +
+"            if (text.charAt(i) != ' ') {osição letra escolhida antes cifra: " + posicao);
                 posicao += 12;
                 System.err.println("Posição cifra ant if: " + posicao);
                 if (posicao > base.length()-1) {
