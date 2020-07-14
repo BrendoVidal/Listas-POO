@@ -19,6 +19,8 @@
 <h3>Documentação</h3>
 <p>Desiner Thing: Analisé geral do problema e apresentação da solução.</p>
 <p>Requisitos: Funcionalidades que são apresentadas no projeto.</p>
+<p>Relatório Sintético: Mostra tudo que foi utilizado no projeto.</p>
+<p>Project Model Canvas e Roadmap</p>
 <h3>Implementação</h3>
 <p>O projeto feito em java.</p>
 <h3>Manual</h3>
